@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ZamowieniaPUP.Models.RokZamowienie>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Zrealizowane zamówienia według lat:</h2>
+
+<p>
+    <a asp-action="Create">Utworz kolejny rok</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Rok)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rok)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Wyświetl zestawienie zamówień</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

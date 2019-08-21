@@ -1,0 +1,125 @@
+﻿@model ZamowieniaPUP.Models.ZamowienieViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Zrealizowane zamówienia</h2>
+
+<div>
+    <h4>  </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RokZamowienie.Rok)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RokZamowienie.Rok)
+        </dd>
+    </dl>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nazwa usługi lub dostawy
+            </th>
+            <th>
+                Ilość
+            </th>
+            <th>
+                Wartość netto
+            </th>
+            <th>
+                Kontrahent
+            </th>
+            <th>
+                Czy umowa?
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Zamowienie item in Model.Zamowienia)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UslugaDostawa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ilosc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CenaNetto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kontrahent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CzyUmowa)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+    <tr>
+        <th>
+            <p>SUMA</p>
+        </th>
+        <th></th>
+        <th>@ViewBag.Total</th>
+        <th></th>
+        <th></th>
+    </tr>
+</table>
+
+<h4>Dodaj nowe zamówienie</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Details">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="RokID" value="@Model.RokZamowienie.Id" />
+
+            <div class="form-group">
+                <label asp-for="UslugaDostawa" class="control-label"></label>
+                <input asp-for="UslugaDostawa" class="form-control" />
+                <span asp-validation-for="UslugaDostawa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ilosc" class="control-label"></label>
+                <input asp-for="Ilosc" class="form-control" />
+                <span asp-validation-for="Ilosc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CenaNetto" class="control-label"></label>
+                <input asp-for="CenaNetto" class="form-control" />
+                <span asp-validation-for="CenaNetto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Kontrahent" class="control-label"></label>
+                <input asp-for="Kontrahent" class="form-control" />
+                <span asp-validation-for="Kontrahent" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CzyUmowa" class="control-label"></label>
+                <input asp-for="CzyUmowa" class="form-control" />
+                <span asp-validation-for="CzyUmowa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RokZamowienie.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
