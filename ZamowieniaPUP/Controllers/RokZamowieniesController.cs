@@ -22,14 +22,11 @@ namespace ZamowieniaPUP.Controllers
         // GET: RokZamowienies
         public async Task<IActionResult> Index()
         {
-         //   var zamowienie = _context.Zamowienie.Include(z => z.CenaNetto);
-         //   ViewBag.Total = zamowienie.Sum(x => x.CenaNetto);
-
             return View(await _context.RokZamowienie.ToListAsync());
         }
 
         // GET: RokZamowienies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string sortOrder)
         {
             if (id == null)
             {
@@ -48,12 +45,29 @@ namespace ZamowieniaPUP.Controllers
             //Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Zamowienie, float> zamowienie = _context.Zamowienie.Include(z => z.CenaNetto);
             //ViewBag.Total = zamowienie.Sum(x => x.CenaNetto);
 
-            ZamowienieViewModel viewModel = await GetZamowienieViewModelFromRokZamowienie(rokZamowienie);
 
+            // Sortowanie - dodać @Html.ActionLink("Kontrahent", "Details", new { sortOrder = ViewBag.NameSortParm })
+
+                        ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "Ko";
+                    //    ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+                        var kontrahenci = from s in _context.Zamowienie
+                                          select s;
+                        switch (sortOrder)
+                        {
+                            case "name_desc":
+                                kontrahenci = kontrahenci.OrderByDescending(s => s.Kontrahent);
+                                break;
+                        }
+               //         return View(await kontrahenci.AsNoTracking().ToListAsync());
+
+
+
+            ZamowienieViewModel viewModel = await GetZamowienieViewModelFromRokZamowienie(rokZamowienie);
+            
             return View(viewModel);
+            
         }
 
-       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details([Bind("RokID,UslugaDostawa,Ilosc,CenaNetto,Kontrahent,CzyUmowa")] ZamowienieViewModel viewModel)
@@ -91,7 +105,6 @@ namespace ZamowieniaPUP.Controllers
 
             viewModel.RokZamowienie = rokZamowienie;
 
-
             //sprawdzic przy relacjach między tabelami
             List<Zamowienie> zamowienia = await _context.Zamowienie
                 .Where(m => m.TenRokZamowienie == rokZamowienie).ToListAsync();
@@ -99,7 +112,6 @@ namespace ZamowieniaPUP.Controllers
             viewModel.Zamowienia = zamowienia;
             return viewModel;
         }
-
 
 
         // GET: RokZamowienies/Create
